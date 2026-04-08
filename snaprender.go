@@ -222,6 +222,68 @@ func (c *Client) Sign(ctx context.Context, urlStr string, opts *SignOptions) (*S
 	return &result, nil
 }
 
+// Extract extracts content from a web page.
+// Supports types: markdown, text, html, article, links, metadata.
+func (c *Client) Extract(ctx context.Context, urlStr string, opts *ExtractOptions) (*ExtractResponse, error) {
+	if opts == nil {
+		opts = &ExtractOptions{}
+	}
+
+	body := map[string]interface{}{"url": urlStr}
+	if opts.Type != "" {
+		body["type"] = opts.Type
+	}
+	if opts.Selector != "" {
+		body["selector"] = opts.Selector
+	}
+	if opts.BlockAds != nil {
+		body["block_ads"] = *opts.BlockAds
+	}
+	if opts.BlockCookieBanners != nil {
+		body["block_cookie_banners"] = *opts.BlockCookieBanners
+	}
+	if opts.Delay > 0 {
+		body["delay"] = opts.Delay
+	}
+	if opts.MaxLength > 0 {
+		body["max_length"] = opts.MaxLength
+	}
+	if opts.Cache != nil {
+		body["cache"] = *opts.Cache
+	}
+	if opts.CacheTTL > 0 {
+		body["cache_ttl"] = opts.CacheTTL
+	}
+
+	data, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/v1/extract", bytes.NewReader(data))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("X-API-Key", c.apiKey)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, parseAPIError(resp)
+	}
+
+	var result ExtractResponse
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("snaprender: failed to decode extract response: %w", err)
+	}
+	return &result, nil
+}
+
 // Usage returns the current month's usage statistics.
 func (c *Client) Usage(ctx context.Context) (*UsageResponse, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+"/v1/usage", nil)

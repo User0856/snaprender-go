@@ -1,5 +1,7 @@
 package snaprender
 
+import "encoding/json"
+
 // CaptureOptions configures a screenshot capture request.
 type CaptureOptions struct {
 	Format             string `json:"format,omitempty"`
@@ -40,6 +42,27 @@ type SignOptions struct {
 
 // Bool returns a pointer to a bool value, for use with option fields.
 func Bool(v bool) *bool { return &v }
+
+// ExtractOptions configures a content extraction request.
+type ExtractOptions struct {
+	Type               string `json:"type,omitempty"`
+	Selector           string `json:"selector,omitempty"`
+	BlockAds           *bool  `json:"block_ads,omitempty"`
+	BlockCookieBanners *bool  `json:"block_cookie_banners,omitempty"`
+	Delay              int    `json:"delay,omitempty"`
+	MaxLength          int    `json:"max_length,omitempty"`
+	Cache              *bool  `json:"cache,omitempty"`
+	CacheTTL           int    `json:"cache_ttl,omitempty"`
+}
+
+// ExtractResponse is the response from the extract endpoint.
+type ExtractResponse struct {
+	URL             string          `json:"url"`
+	Type            string          `json:"type"`
+	Content         json.RawMessage `json:"content"`
+	WordCount       *int            `json:"wordCount,omitempty"`
+	ProcessingTimeMs int            `json:"processingTimeMs"`
+}
 
 // CaptureJSONResponse is the JSON response from the screenshot endpoint.
 type CaptureJSONResponse struct {
