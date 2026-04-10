@@ -33,6 +33,14 @@ func main() {
 }
 ```
 
+> **Cache is OFF by default.** Every request captures a fresh screenshot. To save credits on repeated requests, pass `Cache: snaprender.Bool(true)`. Cached hits are free and return in under 200ms:
+>
+> ```go
+> img, err := client.Capture(ctx, "https://example.com", &snaprender.CaptureOptions{
+>     Cache: snaprender.Bool(true),
+> })
+> ```
+
 ## Features
 
 - URL, HTML, and Markdown screenshots
@@ -103,8 +111,8 @@ All capture options:
 | `HideSelectors` | `string` | CSS selectors to hide |
 | `ClickSelector` | `string` | CSS selector to click before capture |
 | `UserAgent` | `string` | Custom User-Agent string |
-| `Cache` | `*bool` | Enable/disable caching |
-| `CacheTTL` | `int` | Cache time-to-live in seconds |
+| `Cache` | `*bool` | Return cached result if available. **Off by default:** set `Bool(true)` to enable caching. Cached hits are free but may be up to 24h old. |
+| `CacheTTL` | `int` | Cache lifetime in seconds (default 24h). Cached screenshots older than this are recaptured. |
 | `ResponseType` | `string` | Set to `"json"` for JSON response |
 
 Use `snaprender.Bool(true)` or `snaprender.Bool(false)` for `*bool` fields.
@@ -177,8 +185,8 @@ Extract options:
 | `BlockCookieBanners` | `*bool` | Remove cookie consent banners |
 | `Delay` | `int` | Wait time in ms before extraction |
 | `MaxLength` | `int` | Truncate content to this character count |
-| `Cache` | `*bool` | Enable/disable caching |
-| `CacheTTL` | `int` | Cache time-to-live in seconds |
+| `Cache` | `*bool` | Return cached extraction if available. **Off by default:** set `Bool(true)` to enable caching. Cached hits are free but may be stale. |
+| `CacheTTL` | `int` | Cache lifetime in seconds (default 24h). |
 
 ### Batch screenshots
 
