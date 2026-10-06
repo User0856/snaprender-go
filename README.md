@@ -1,3 +1,5 @@
+<a href="https://snap-render.com"><img src="https://snap-render.com/brand/snaprender-icon-128.png" alt="SnapRender" width="64" height="64"></a>
+
 # SnapRender Go SDK
 
 Official Go client for the [SnapRender Screenshot API](https://snap-render.com).
