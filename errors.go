@@ -9,6 +9,7 @@ type Error struct {
 	Status  int    `json:"status"`
 }
 
+// Error implements the error interface.
 func (e *Error) Error() string {
 	return fmt.Sprintf("snaprender: %s (%d): %s", e.Code, e.Status, e.Message)
 }

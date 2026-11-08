@@ -57,11 +57,11 @@ type ExtractOptions struct {
 
 // ExtractResponse is the response from the extract endpoint.
 type ExtractResponse struct {
-	URL             string          `json:"url"`
-	Type            string          `json:"type"`
-	Content         json.RawMessage `json:"content"`
-	WordCount       *int            `json:"wordCount,omitempty"`
-	ProcessingTimeMs int            `json:"processingTimeMs"`
+	URL              string          `json:"url"`
+	Type             string          `json:"type"`
+	Content          json.RawMessage `json:"content"`
+	WordCount        *int            `json:"wordCount,omitempty"`
+	ProcessingTimeMs int             `json:"processingTimeMs"`
 }
 
 // BatchOptions configures a batch screenshot request.

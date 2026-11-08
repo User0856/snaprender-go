@@ -2,6 +2,11 @@
 
 # SnapRender Go SDK
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/User0856/snaprender-go.svg)](https://pkg.go.dev/github.com/User0856/snaprender-go)
+[![Test](https://github.com/User0856/snaprender-go/actions/workflows/test.yml/badge.svg)](https://github.com/User0856/snaprender-go/actions/workflows/test.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/User0856/snaprender-go)](https://goreportcard.com/report/github.com/User0856/snaprender-go)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Official Go client for the [SnapRender Screenshot API](https://snap-render.com).
 
 ## Installation
@@ -375,4 +380,4 @@ Standalone functions (no client needed):
 
 ## License
 
-MIT
+MIT, see [LICENSE](LICENSE).
