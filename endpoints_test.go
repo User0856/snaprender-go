@@ -49,7 +49,7 @@ func fakeAPI(t *testing.T, status int, respBody string) (*httptest.Server, *reco
 
 func allCaptureOptions() *CaptureOptions {
 	return &CaptureOptions{
-		Format: "webp", Width: 1440, Height: 900, FullPage: Bool(true), Quality: 80, Delay: 500,
+		Format: "webp", Width: 1440, Height: 900, FullPage: Bool(true), LazyLoad: Bool(true), Quality: 80, Delay: 500,
 		DarkMode: Bool(true), BlockAds: Bool(true), BlockCookieBanners: Bool(false), Device: "iphone_15",
 		HideSelectors: ".chat", ClickSelector: "#accept", UserAgent: "test-agent", Cache: Bool(false),
 		CacheTTL: 3600, ResponseType: "binary",
@@ -91,7 +91,7 @@ func TestCaptureAllQueryParams(t *testing.T) {
 	if _, err := c.Capture(context.Background(), "https://example.com", allCaptureOptions()); err != nil {
 		t.Fatal(err)
 	}
-	for _, k := range []string{"format", "width", "height", "full_page", "quality", "delay", "dark_mode", "block_ads",
+	for _, k := range []string{"format", "width", "height", "full_page", "lazy_load", "quality", "delay", "dark_mode", "block_ads",
 		"block_cookie_banners", "device", "hide_selectors", "click_selector", "user_agent", "cache", "cache_ttl", "response_type"} {
 		if _, ok := rec.query[k]; !ok {
 			t.Errorf("missing query param %q", k)
@@ -111,7 +111,7 @@ func TestCaptureHTMLAllBodyFields(t *testing.T) {
 	if rec.method != http.MethodPost || rec.path != "/v1/screenshot" {
 		t.Fatalf("unexpected request %s %s", rec.method, rec.path)
 	}
-	expectKeys(t, rec.body, "html", "format", "width", "height", "full_page", "quality", "delay", "dark_mode", "block_ads",
+	expectKeys(t, rec.body, "html", "format", "width", "height", "full_page", "lazy_load", "quality", "delay", "dark_mode", "block_ads",
 		"block_cookie_banners", "device", "hide_selectors", "click_selector", "user_agent", "cache", "cache_ttl", "response_type")
 }
 
@@ -131,7 +131,7 @@ func TestSignAllFields(t *testing.T) {
 	srv, rec := fakeAPI(t, 200, `{"signed_url":"https://app.snap-render.com/s/abc","expires_at":"2030-01-01T00:00:00Z","expires_in":3600}`)
 	c := NewClient("k", WithBaseURL(srv.URL))
 	res, err := c.Sign(context.Background(), "https://example.com", &SignOptions{
-		ExpiresIn: 3600, Format: "png", Width: 1200, Height: 630, FullPage: Bool(false), Quality: 90, Delay: 100,
+		ExpiresIn: 3600, Format: "png", Width: 1200, Height: 630, FullPage: Bool(false), LazyLoad: Bool(false), Quality: 90, Delay: 100,
 		DarkMode: Bool(true), BlockAds: Bool(true), BlockCookieBanners: Bool(true), Device: "desktop",
 		HideSelectors: ".x", ClickSelector: ".y", UserAgent: "ua",
 	})
@@ -141,7 +141,7 @@ func TestSignAllFields(t *testing.T) {
 	if rec.path != "/v1/screenshot/sign" || res.ExpiresIn != 3600 {
 		t.Fatalf("unexpected path %s or result %+v", rec.path, res)
 	}
-	expectKeys(t, rec.body, "url", "expires_in", "format", "width", "height", "full_page", "quality", "delay", "dark_mode",
+	expectKeys(t, rec.body, "url", "expires_in", "format", "width", "height", "full_page", "lazy_load", "quality", "delay", "dark_mode",
 		"block_ads", "block_cookie_banners", "device", "hide_selectors", "click_selector", "user_agent")
 }
 
@@ -183,7 +183,7 @@ func TestBatch(t *testing.T) {
 	srv, rec := fakeAPI(t, 202, `{"jobId":"job_1","status":"pending","statusUrl":"/v1/screenshot/batch/job_1","total":2}`)
 	c := NewClient("k", WithBaseURL(srv.URL))
 	res, err := c.Batch(context.Background(), []string{"https://a.com", "https://b.com"}, &BatchOptions{
-		Format: "jpeg", Width: 1024, Height: 768, FullPage: Bool(true), Quality: 70, Delay: 50, DarkMode: Bool(false),
+		Format: "jpeg", Width: 1024, Height: 768, FullPage: Bool(true), LazyLoad: Bool(true), Quality: 70, Delay: 50, DarkMode: Bool(false),
 		BlockAds: Bool(true), BlockCookieBanners: Bool(true), Device: "ipad", HideSelectors: ".a", ClickSelector: ".b", UserAgent: "ua",
 	})
 	if err != nil {
@@ -192,7 +192,7 @@ func TestBatch(t *testing.T) {
 	if rec.path != "/v1/screenshot/batch" || res.JobID != "job_1" || res.Total != 2 {
 		t.Fatalf("unexpected path %s or result %+v", rec.path, res)
 	}
-	expectKeys(t, rec.body, "urls", "format", "width", "height", "full_page", "quality", "delay", "dark_mode", "block_ads",
+	expectKeys(t, rec.body, "urls", "format", "width", "height", "full_page", "lazy_load", "quality", "delay", "dark_mode", "block_ads",
 		"block_cookie_banners", "device", "hide_selectors", "click_selector", "user_agent")
 	if urls, _ := rec.body["urls"].([]interface{}); len(urls) != 2 {
 		t.Fatalf("expected 2 urls, got %v", rec.body["urls"])

@@ -109,6 +109,7 @@ All capture options:
 | `Width` | `int` | Viewport width in pixels |
 | `Height` | `int` | Viewport height in pixels |
 | `FullPage` | `*bool` | Capture the full scrollable page |
+| `LazyLoad` | `*bool` | With `FullPage`, scroll through the page first so lazy-loaded images appear (usually 1-5 s slower). Ignored unless `FullPage` is true |
 | `Quality` | `int` | JPEG/WebP quality (1-100) |
 | `Delay` | `int` | Wait time in ms before capture |
 | `DarkMode` | `*bool` | Enable dark mode |
@@ -227,18 +228,18 @@ for {
 }
 ```
 
-Batch options support the same capture parameters: `Format`, `Width`, `Height`, `FullPage`, `Quality`, `Delay`, `DarkMode`, `BlockAds`, `BlockCookieBanners`, `Device`, `HideSelectors`, `ClickSelector`, `UserAgent`.
+Batch options support the same capture parameters: `Format`, `Width`, `Height`, `FullPage`, `LazyLoad`, `Quality`, `Delay`, `DarkMode`, `BlockAds`, `BlockCookieBanners`, `Device`, `HideSelectors`, `ClickSelector`, `UserAgent`.
 
 ### Webhooks
 
-Register webhooks to receive notifications for events like `screenshot.completed` and `batch.completed`. Maximum 5 webhooks per account.
+Register webhooks to receive notifications for events like `screenshot.completed` (a batch job finished) and `quota.warning`. Maximum 5 webhooks per account.
 
 #### Create a webhook
 
 ```go
 wh, err := client.CreateWebhook(ctx, &snaprender.WebhookCreateOptions{
     URL:    "https://your-server.com/webhooks/snaprender",
-    Events: []string{"screenshot.completed", "batch.completed"},
+    Events: []string{"screenshot.completed", "quota.warning"},
 })
 fmt.Printf("Webhook ID: %s\n", wh.ID)
 fmt.Printf("Secret: %s\n", wh.Secret) // Save this for signature verification
@@ -275,7 +276,7 @@ When your server receives a webhook, verify the HMAC-SHA256 signature to confirm
 ```go
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
     body, _ := io.ReadAll(r.Body)
-    signature := r.Header.Get("X-Webhook-Signature")
+    signature := r.Header.Get("X-SnapRender-Signature")
 
     if !snaprender.VerifyWebhookSignature(string(body), signature, webhookSecret) {
         http.Error(w, "invalid signature", http.StatusForbidden)

@@ -168,6 +168,9 @@ func (c *Client) Sign(ctx context.Context, urlStr string, opts *SignOptions) (*S
 	if opts.FullPage != nil {
 		body["full_page"] = *opts.FullPage
 	}
+	if opts.LazyLoad != nil {
+		body["lazy_load"] = *opts.LazyLoad
+	}
 	if opts.Quality > 0 {
 		body["quality"] = opts.Quality
 	}
@@ -306,6 +309,9 @@ func (c *Client) Batch(ctx context.Context, urls []string, opts *BatchOptions) (
 	}
 	if opts.FullPage != nil {
 		body["full_page"] = *opts.FullPage
+	}
+	if opts.LazyLoad != nil {
+		body["lazy_load"] = *opts.LazyLoad
 	}
 	if opts.Quality > 0 {
 		body["quality"] = opts.Quality
@@ -639,6 +645,9 @@ func setCommonParams(params url.Values, opts *CaptureOptions) {
 	if opts.FullPage != nil {
 		params.Set("full_page", strconv.FormatBool(*opts.FullPage))
 	}
+	if opts.LazyLoad != nil {
+		params.Set("lazy_load", strconv.FormatBool(*opts.LazyLoad))
+	}
 	if opts.Quality > 0 {
 		params.Set("quality", strconv.Itoa(opts.Quality))
 	}
@@ -689,6 +698,9 @@ func addCommonBody(body map[string]interface{}, opts *CaptureOptions) {
 	}
 	if opts.FullPage != nil {
 		body["full_page"] = *opts.FullPage
+	}
+	if opts.LazyLoad != nil {
+		body["lazy_load"] = *opts.LazyLoad
 	}
 	if opts.Quality > 0 {
 		body["quality"] = opts.Quality

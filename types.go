@@ -8,6 +8,7 @@ type CaptureOptions struct {
 	Width              int    `json:"width,omitempty"`
 	Height             int    `json:"height,omitempty"`
 	FullPage           *bool  `json:"full_page,omitempty"`
+	LazyLoad           *bool  `json:"lazy_load,omitempty"` // with FullPage: scroll first so lazy-loaded images appear
 	Quality            int    `json:"quality,omitempty"`
 	Delay              int    `json:"delay,omitempty"`
 	DarkMode           *bool  `json:"dark_mode,omitempty"`
@@ -29,6 +30,7 @@ type SignOptions struct {
 	Width              int    `json:"width,omitempty"`
 	Height             int    `json:"height,omitempty"`
 	FullPage           *bool  `json:"full_page,omitempty"`
+	LazyLoad           *bool  `json:"lazy_load,omitempty"` // with FullPage: scroll first so lazy-loaded images appear
 	Quality            int    `json:"quality,omitempty"`
 	Delay              int    `json:"delay,omitempty"`
 	DarkMode           *bool  `json:"dark_mode,omitempty"`
@@ -70,6 +72,7 @@ type BatchOptions struct {
 	Width              int    `json:"width,omitempty"`
 	Height             int    `json:"height,omitempty"`
 	FullPage           *bool  `json:"full_page,omitempty"`
+	LazyLoad           *bool  `json:"lazy_load,omitempty"` // with FullPage: scroll first so lazy-loaded images appear
 	Quality            int    `json:"quality,omitempty"`
 	Delay              int    `json:"delay,omitempty"`
 	DarkMode           *bool  `json:"dark_mode,omitempty"`
