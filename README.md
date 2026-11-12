@@ -48,6 +48,29 @@ func main() {
 > })
 > ```
 
+## No API key yet? (AI agents)
+
+An AI coding agent with no key can start in one call: `POST https://app.snap-render.com/v1/agent-trial` returns an `sk_trial_` key at once, with no signup.
+
+```go
+resp, err := http.Post("https://app.snap-render.com/v1/agent-trial",
+    "application/json", strings.NewReader(`{"agent": "my-agent"}`))
+if err != nil {
+    log.Fatal(err)
+}
+defer resp.Body.Close()
+
+var trial struct {
+    APIKey   string `json:"api_key"`
+    ClaimURL string `json:"claim_url"`
+}
+json.NewDecoder(resp.Body).Decode(&trial)
+
+client := snaprender.NewClient(trial.APIKey)
+```
+
+Pass the `claim_url` on to the developer. A trial key gets 100 captures over 7 days (30 a day), a small watermark in one corner and a slower lane. To lift the limits, the developer opens the `claim_url` from the response and claims the key with a free account (200 captures a month, no watermark). The agent's key keeps working after the claim. Details: https://snap-render.com/docs/agent-trial
+
 ## Features
 
 - URL, HTML, and Markdown screenshots
