@@ -4,6 +4,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/User0856/snaprender-go.svg)](https://pkg.go.dev/github.com/User0856/snaprender-go)
 [![Test](https://github.com/User0856/snaprender-go/actions/workflows/test.yml/badge.svg)](https://github.com/User0856/snaprender-go/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/User0856/snaprender-go/graph/badge.svg)](https://app.codecov.io/gh/User0856/snaprender-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/User0856/snaprender-go)](https://goreportcard.com/report/github.com/User0856/snaprender-go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
